@@ -11,6 +11,8 @@
     ;; 0070-007F  64-bit floats
     ;; 0080-008F  16, i8 swizzle indices
     ;; 0090-009F  v128 data
+    ;; 00A0-00AF  1st Shuffle arg data
+    ;; 00B0-00BF  2nd Shuffle arg data
   )
 
   (global $I8_DATA_U       i32 (i32.const 0x0000))
@@ -23,6 +25,8 @@
   (global $F64_DATA        i32 (i32.const 0x0070))
   (global $SWIZZLE_INDICES i32 (i32.const 0x0080))
   (global $V128_DATA       i32 (i32.const 0x0090))
+  (global $SHUFFLE_ARG_1   i32 (i32.const 0x00A0))
+  (global $SHUFFLE_ARG_2   i32 (i32.const 0x00B0))
 
   (global $OUTPUT_PTR i32 (i32.const 0x0100))
 
@@ -52,6 +56,26 @@
       (i8x16.swizzle
         (v128.load (global.get $I8_DATA_U))
         (v128.load (global.get $SWIZZLE_INDICES))
+      )
+    )
+
+    (global.get $OUTPUT_PTR)  ;; Byte offset
+    (i32.const 16)            ;; Byte length
+  )
+
+  ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  ;; Shuffle
+  ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  (func (export "shuffle")
+        (result i32 i32)
+
+    (v128.store
+      (global.get $OUTPUT_PTR)
+      (i8x16.shuffle
+        0 17 2 19 4 21 6 23 8 25 10 27 12 29 14 31
+        (v128.load (global.get $SHUFFLE_ARG_1))
+        (v128.load (global.get $SHUFFLE_ARG_2))
       )
     )
 

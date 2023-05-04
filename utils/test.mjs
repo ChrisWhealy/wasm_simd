@@ -11,7 +11,7 @@ export const assert = (testGroup, testType) => {
       let diffPrefix = 'Difference: '.padStart(prefixLen, ' ')
 
       return (testName, expected, received) => {
-        let testPrefix = `${testGroup}: ${testName}`
+        let testPrefix = (testName === testGroup) ? testGroup : `${testGroup}: ${testName}`
         let formatter = (expected.type === 'f32' || expected.type === 'f64') ? FMT.formatNumber : FMT[`${expected.type}AsHexStr`]
 
         // Assume the test passes
@@ -42,7 +42,7 @@ export const assert = (testGroup, testType) => {
       let receivedPrefix = 'Received: '.padStart(prefixLen, ' ')
 
       return (testName, expected, received) => {
-        let testPrefix = `${testGroup}: ${testName}`
+        let testPrefix = (testName === testGroup) ? testGroup : `${testGroup}: ${testName}`
 
         // Assume the test passes
         let msg = `${FMT.successIcon} ${testPrefix} passed`
@@ -71,7 +71,7 @@ export const assert = (testGroup, testType) => {
       let diffPrefix = 'Difference: '.padStart(prefixLen, ' ')
 
       return (testName, expected, received) => {
-        let testPrefix = `${testGroup}: ${testName}`
+        let testPrefix = (testName === testGroup) ? testGroup : `${testGroup}: ${testName}`
         let formatter = (expected.type === 'f32' || expected.type === 'f64') ? FMT.formatNumber : FMT[`${expected.type}AsHexStr`]
         let body = `${expectedPrefix}${formatter(expected.value)}\n${receivedPrefix}${formatter(received)}`
 
@@ -122,15 +122,19 @@ export const simdDatatypes = (m => {
  * 0050-005F  4 x 32-bit floats
  * 0060-006F  2 x 64-bit signed integers
  * 0070-007F  2 x 64-bit floats
+ * 0080-008F  16 x i8 swizzle indices
+ * 0090-009F  Arbitrary v128 data
+ * 00A0-00AF  1st Shuffle arg data
+ * 00B0-00BF  2nd Shuffle arg data
  */
 export const initialiseSharedMemory = wasmMemoryBuffer => {
   // 0000-000F   8-bit unsigned integers
   // 0010-001F   8-bit signed integers
-  let wasmMem8 = new Uint8Array(wasmMemoryBuffer)
+  let wasmMem8u = new Uint8Array(wasmMemoryBuffer)
 
   for (let i8 = 0; i8 < 16; i8++) {
-    wasmMem8[i8] = i8
-    wasmMem8[i8 + 16] = i8 | 0x80  // Flip sign bit
+    wasmMem8u[i8] = i8
+    wasmMem8u[i8 + 16] = i8 | 0x80  // Flip sign bit
   }
 
   // 0020-002F  16-bit unsigned integers
@@ -164,7 +168,7 @@ export const initialiseSharedMemory = wasmMemoryBuffer => {
 
   // * 0080-008F  16, 8-bit swizzle indices [0x0F..0x00]
   for (let i = 128; i < 144; i++) {
-    wasmMem8[i] = 15 - (i - 128)
+    wasmMem8u[i] = 15 - (i - 128)
   }
 
   // * 0090-009F  Arbitrary v128 data
@@ -172,6 +176,13 @@ export const initialiseSharedMemory = wasmMemoryBuffer => {
   wasmMem32i[37] = 0xCAFED00D  // Cafe dood
   wasmMem32i[38] = 0xBADDECAF  // Bad Decaf
   wasmMem32i[39] = 0x0DDC15C0  // Odd Cisco
+
+  // * 00A0-00AF  1st Shuffle arg data
+  // * 00B0-00BF  2nd Shuffle arg data
+  for (let i = 160; i < 176; i++) {
+    wasmMem8u[i] = i - 160
+    wasmMem8u[i + 16] = i + 80  // Switch senior 4 bits on
+  }
 }
 
 export const typedArrayForMemoryBuffer = wasmMemBuffer =>

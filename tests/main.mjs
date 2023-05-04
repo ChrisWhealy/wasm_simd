@@ -8,6 +8,7 @@ import testSplat from './splat.mjs'
 import testExtractLane from './extract_lane.mjs'
 import testReplaceLane from './replace_lane.mjs'
 import testSwizzle from './swizzle.mjs'
+import testShuffle from './shuffle.mjs'
 
 const wasmFilePath = "./bin/simd.wasm"
 
@@ -16,9 +17,11 @@ startWasmModule(wasmFilePath)
     ({ exports }) => {
       initialiseSharedMemory(exports.memory.buffer)
 
+      testSplat(exports)
+      testSwizzle(exports)
+      testShuffle(exports)
       testExtractLane(exports)
       testReplaceLane(exports)
-      testSwizzle(exports)
-      testSplat(exports)
+
     }
   )
