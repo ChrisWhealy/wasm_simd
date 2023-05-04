@@ -9,6 +9,47 @@ Here is a first attempt to provide some worked examples of each WebAssembly SIMD
 
 ***THIS IS A WORK IN PRGRESS***
 
+## Usage
+
+At the moment, only the unit tests can be run:
+
+```bash
+npm run buildAndTest
+```
+
+This will produce the following output:
+
+```bash
+> understanding-wasm-simd-instructions@1.1.0 buildAndTest
+> wat2wasm ./src/simd.wat -o ./bin/simd.wasm && node ./tests/main.mjs
+
+✅ extract_lane: extract_lane_0_i8_u passed
+
+SNIP
+
+✅ extract_lane: extract_lane_7_i16_s passed
+✅ extract_lane: extract_lane_0_i32 passed
+✅ extract_lane: extract_lane_0_f32 passed within acceptable floating point tolerance
+
+SNIP
+
+✅ replace_lane: replace_lane_1_f64 passed
+✅ swizzle: swizzle_im passed
+✅ swizzle: swizzle_var passed
+✅ splat: splat_i8 passed
+
+SNIP
+
+✅ splat: splat_f64 passed within acceptable floating point tolerance
+```
+
+## Misbehaving F32 values
+
+When the NodeJS host environment echoes an `f32` value such as `Math.PI` into a WebAssembly function (expecting to get the same value back), the `.wasm` function returns a slightly different value with a discrepancy less than about <code>1 x 10<sup>-7</sup></code>.
+
+I haven't yet discovered the cause of this discrepancy; so for the time being, I have simply coded around it.
+Hence, some tests pass with the message `passed within acceptable floating point tolerance`.
+
 ## The SIMD Concept
 
 SIMD is the acronym for ***S***ingle ***I***nstruction, ***M***ultiple ***D***ata and it refers to a set of machine instructions that accelerate processing by simulatneously operating on multiple units of data in the time taken to execute a single instruction.
