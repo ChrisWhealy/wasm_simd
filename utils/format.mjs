@@ -24,7 +24,7 @@ const formatAsBase = base => {
 
 export const genFunctionNameForGroup = testGroup =>
   (suffix, dt, isSigned) =>
-    `${testGroup}_${suffix}_${dt}${isSigned === null ? '' : isSigned ? '_s' : '_u'}`
+    `${testGroup}${suffix === '' ? '' : `_${suffix}`}${dt === '' ? '' : `_${dt}`}${isSigned === null ? '' : isSigned ? '_s' : '_u'}`
 
 export const formatNumber = n => n.toLocaleString("fullwide", { useGrouping: false, maximumSignificantDigits: 20 })
 export const formatNumArray = (arr, formatFn) => arr.reduce((acc, b) => (_ => acc)(acc.push(formatFn(b))), []).join(' ')

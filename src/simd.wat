@@ -72,6 +72,7 @@
 
     (v128.store
       (global.get $OUTPUT_PTR)
+      ;; Take alternate bytes from each vector
       (i8x16.shuffle
         0 17 2 19 4 21 6 23 8 25 10 27 12 29 14 31
         (v128.load (global.get $SHUFFLE_ARG_1))
@@ -596,6 +597,54 @@
     (v128.store
       (global.get $OUTPUT_PTR) (f64x2.replace_lane 1 (v128.load (global.get $V128_DATA)) (local.get $new_val))
     )
+    (global.get $OUTPUT_PTR)
+    (i32.const 16)
+  )
+
+  ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  ;; Integer Addition
+  ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  (func (export "add_i8") (param $arg1 i32) (param $arg2 i32) (result i32 i32)
+    (v128.store (global.get $OUTPUT_PTR) (i8x16.add (v128.load (local.get $arg1)) (v128.load (local.get $arg2))))
+    (global.get $OUTPUT_PTR)
+    (i32.const 16)
+  )
+  (func (export "add_i16") (param $arg1 i32) (param $arg2 i32) (result i32 i32)
+    (v128.store (global.get $OUTPUT_PTR) (i16x8.add (v128.load (local.get $arg1)) (v128.load (local.get $arg2))))
+    (global.get $OUTPUT_PTR)
+    (i32.const 16)
+  )
+  (func (export "add_i32") (param $arg1 i32) (param $arg2 i32) (result i32 i32)
+    (v128.store (global.get $OUTPUT_PTR) (i32x4.add (v128.load (local.get $arg1)) (v128.load (local.get $arg2))))
+    (global.get $OUTPUT_PTR)
+    (i32.const 16)
+  )
+  (func (export "add_i64") (param $arg1 i32) (param $arg2 i32) (result i32 i32)
+    (v128.store (global.get $OUTPUT_PTR) (i64x2.add (v128.load (local.get $arg1)) (v128.load (local.get $arg2))))
+    (global.get $OUTPUT_PTR)
+    (i32.const 16)
+  )
+
+  ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  ;; Integer Subtraction
+  ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  (func (export "sub_i8") (param $arg1 i32) (param $arg2 i32) (result i32 i32)
+    (v128.store (global.get $OUTPUT_PTR) (i8x16.sub (v128.load (local.get $arg1)) (v128.load (local.get $arg2))))
+    (global.get $OUTPUT_PTR)
+    (i32.const 16)
+  )
+  (func (export "sub_i16") (param $arg1 i32) (param $arg2 i32) (result i32 i32)
+    (v128.store (global.get $OUTPUT_PTR) (i16x8.sub (v128.load (local.get $arg1)) (v128.load (local.get $arg2))))
+    (global.get $OUTPUT_PTR)
+    (i32.const 16)
+  )
+  (func (export "sub_i32") (param $arg1 i32) (param $arg2 i32) (result i32 i32)
+    (v128.store (global.get $OUTPUT_PTR) (i32x4.sub (v128.load (local.get $arg1)) (v128.load (local.get $arg2))))
+    (global.get $OUTPUT_PTR)
+    (i32.const 16)
+  )
+  (func (export "sub_i64") (param $arg1 i32) (param $arg2 i32) (result i32 i32)
+    (v128.store (global.get $OUTPUT_PTR) (i64x2.sub (v128.load (local.get $arg1)) (v128.load (local.get $arg2))))
     (global.get $OUTPUT_PTR)
     (i32.const 16)
   )
