@@ -1,0 +1,21 @@
+{
+  "name": "understanding-wasm-simd-instructions",
+  "version": "1.1.0",
+  "description": "Visualisation of how WASM SIMD instructions work",
+  "main": "main.mjs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChrisWhealy/wasm_simd.git"
+  },
+  "scripts": {
+    "build": "wat2wasm ./src/simd.wat -o ./bin/simd.wasm",
+    "tests": "node ./tests/main.mjs",
+    "buildAndTest": "wat2wasm ./src/simd.wat -o ./bin/simd.wasm && node ./tests/main.mjs"
+  },
+  "author": "Chris Whealy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ChrisWhealy/wasm_simd/issues"
+  },
+  "homepage": "https://github.com/ChrisWhealy/wasm_simd#readme"
+}
