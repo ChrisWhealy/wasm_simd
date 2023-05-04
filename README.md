@@ -3,9 +3,9 @@
 The documentation surrounding how WebAssembly instructions are to be used can only be described as "*very poor*".
 There is a [comprehensive core language specification](https://webassembly.github.io/spec/core/), but this is suitable only for designers of the language itself, and is generally unhelpful for developers wishing to make use these of instructions in an application.
 
-This is particularly true of the SIMD instructions whose argument of often supplied in a non-intuitive order.
+This is particularly true of the SIMD instructions whose arguments are often supplied in a non-intuitive order and sometimes not even documented.
 
-Here is a first attempt to provide some worked examples of each WebAssembly SIMD instruction.
+Here is a first attempt to provide some worked examples of each WebAssembly SIMD instruction in action.
 
 ***THIS IS A WORK IN PRGRESS***
 
