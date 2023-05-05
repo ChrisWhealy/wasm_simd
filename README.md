@@ -5,7 +5,7 @@ There is a [comprehensive core language specification](https://webassembly.githu
 
 This is particularly true of the SIMD instructions whose arguments are often supplied in a non-intuitive order and sometimes are not even documented.
 
-This repo is a first towards providing worked examples of how each WebAssembly SIMD instruction can be used.
+This repo is a first step towards providing a set of worked examples of how each WebAssembly SIMD instruction can be used.
 
 ***THIS IS A WORK IN PRGRESS***
 
