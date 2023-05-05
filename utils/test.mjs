@@ -84,7 +84,7 @@ export const assert = (testGroup, testType) => {
         if (expected.value !== received) {
           // Deal with floating point weirdness
           msg = (expected.type === 'f32' || expected.type === 'f64')
-            ? diff > MATH.FLOAT_ACCEPTABLE_TOLERANCE
+            ? !!expected.precise || diff > MATH.FLOAT_ACCEPTABLE_TOLERANCE
               ? `${FMT.failureIcon} ${testPrefix} failed\n${body}\n${diffPrefix}${formatter(diff)}`
               : `${FMT.successIcon} ${testPrefix} passed within acceptable floating point tolerance`
             : `${FMT.failureIcon} ${testPrefix} failed\n${body}`

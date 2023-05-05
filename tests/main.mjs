@@ -19,11 +19,11 @@ startWasmModule(wasmFilePath)
     ({ exports }) => {
       initialiseSharedMemory(exports.memory.buffer)
 
-      // testSplat(exports)
-      // testSwizzle(exports)
-      // testShuffle(exports)
-      // testExtractLane(exports)
-      // testReplaceLane(exports)
+      testSplat(exports)
+      testSwizzle(exports)
+      testShuffle(exports)
+      testExtractLane(exports)
+      testReplaceLane(exports)
       testAdd(exports)
       testSubtract(exports)
     }
