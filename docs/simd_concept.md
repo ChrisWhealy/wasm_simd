@@ -27,7 +27,7 @@ The number of operations needed to perform this task can be illustrated like thi
 
 ![Scalar Addition](../img/scalar_addition.png)
 
-That's all fine, but since we know that both arrays contain the same number of elements, it would be much more efficient to execute this addition in parallel.
+That's all fine, but since we know that both arrays contain both the same number and type of elements, it would be much more efficient to execute this addition in parallel.
 This is exactly what the SIMD instructions allow you to do.
 
 Here's the same array addition implemented as a single SIMD instruction:
