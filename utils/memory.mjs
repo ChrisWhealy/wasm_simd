@@ -18,6 +18,8 @@ import {
  * 0090-009F  Arbitrary v128 data
  * 00A0-00AF  1st Shuffle arg data
  * 00B0-00BF  2nd Shuffle arg data
+ * 00C0-00CF  Values that will overflow when added/multiplied etc
+ * 00D0-00DF  Values that will overflow when added/multiplied etc
  */
 export const initialiseSharedMemory = wasmMemoryBuffer => {
   // 0000-000F   8-bit unsigned integers
@@ -90,6 +92,16 @@ export const initialiseSharedMemory = wasmMemoryBuffer => {
   // 00B0-00BF  0x80818283 0x84858687 0x88898A8B 0x8C8D8E8F
   for (let i = 160; i < 176; i++) {
     wasmMem8u[i] = i - 160
-    wasmMem8u[i + 16] = i + 80  // Switch senior 4 bits on
+    wasmMem8u[i + 16] = i + 80  // Switch senior bits to 1111
+  }
+
+  // 00C0-00CF  Values that will overflow when added/multiplied
+  // 00D0-00DF  Values that will overflow when added/multiplied
+  //
+  // 00C0-00CF  0x70717273 0x74757677 0x78797A7B 0x7C7D7E7F
+  // 00D0-00DF  0xF0F1F2F3 0xF4F5F6F7 0xF8FFFAFB 0xFCFDFEFF
+  for (let i = 192; i < 208; i++) {
+    wasmMem8u[i] = 112 + (i - 192)       // Set senior bits to 0111
+    wasmMem8u[i + 16] = 240 + (i - 192)  // Set senior bits to 1111
   }
 }

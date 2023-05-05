@@ -13,6 +13,7 @@
     ;; 0090-009F  v128 data
     ;; 00A0-00AF  1st Shuffle arg data
     ;; 00B0-00BF  2nd Shuffle arg data
+    ;; 00C0-00CF  Values that will overflow when added/multiplied
   )
 
   (global $I8_DATA_U       i32 (i32.const 0x0000))

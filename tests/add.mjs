@@ -16,6 +16,8 @@ const testAdd = wasmExports => {
   }
 
   let fnName = genFnName('', 'i8', null)
+
+  // Addition without overflow
   let [offset1, len1] = wasmExports[fnName](0x0200, 0x0210)
 
   assert_pointwise_eq(
@@ -24,7 +26,18 @@ const testAdd = wasmExports => {
     wasmMem8.slice(offset1, offset1 + len1)
   )
 
+  // Addition with ignored overflow
+  let [offset1o, len1o] = wasmExports[fnName](0x00C0, 0x00D0)
+
+  assert_pointwise_eq(
+    fnName,
+    new Uint8Array([0x60, 0x62, 0x64, 0x66, 0x68, 0x6A, 0x6C, 0x6E, 0x70, 0x72, 0x74, 0x76, 0x78, 0x7A, 0x7C, 0x7E]),
+    wasmMem8.slice(offset1o, offset1o + len1o)
+  )
+
   fnName = genFnName('', 'i16', null)
+
+  // Addition without overflow
   let [offset2, len2] = wasmExports[fnName](0x0200, 0x0210)
   let i16offset = offset2 >>> 1
   let i16len = len2 >>> 1
@@ -36,7 +49,21 @@ const testAdd = wasmExports => {
     wasmMem16.slice(i16offset, i16offset + i16len)
   )
 
+  // Addition with ignored overflow
+  let [offset2o, len2o] = wasmExports[fnName](0x00C0, 0x00D0)
+  let i16offseto = offset2o >>> 1
+  let i16leno = len2o >>> 1
+
+  assert_pointwise_eq(
+    fnName,
+    // Expected data must be supplied in little-endian form!
+    new Uint16Array([0x6360, 0x6764, 0x6B68, 0x6F6C, 0x7370, 0x7774, 0x7B78, 0x7F7C]),
+    wasmMem16.slice(i16offseto, i16offseto + i16leno)
+  )
+
   fnName = genFnName('', 'i32', null)
+
+  // Addition without overflow
   let [offset3, len3] = wasmExports[fnName](0x0200, 0x0210)
   let i32offset = offset3 >>> 2
   let i32len = len3 >>> 2
@@ -48,7 +75,21 @@ const testAdd = wasmExports => {
     wasmMem32.slice(i32offset, i32offset + i32len)
   )
 
+  // Addition with ignored overflow
+  let [offset3o, len3o] = wasmExports[fnName](0x00C0, 0x00D0)
+  let i32offseto = offset3o >>> 2
+  let i32leno = len3o >>> 2
+
+  assert_pointwise_eq(
+    fnName,
+    // Expected data must be supplied in little-endian form!
+    new Uint32Array([0x67656360, 0x6F6D6B68, 0x77757370, 0x7F7D7B78]),
+    wasmMem32.slice(i32offseto, i32offseto + i32leno)
+  )
+
   fnName = genFnName('', 'i64', null)
+
+  // Addition without overflow
   let [offset4, len4] = wasmExports[fnName](0x0200, 0x0210)
   let i64offset = offset4 >>> 3
   let i64len = len4 >>> 3
@@ -58,6 +99,18 @@ const testAdd = wasmExports => {
     // Expected data must be supplied in little-endian form!
     new BigUint64Array([0x0E0C0A0806040200n, 0x1E1C1A1816141210n]),
     wasmMem64.slice(i64offset, i64offset + i64len)
+  )
+
+  // Addition with ignored overflow
+  let [offset4o, len4o] = wasmExports[fnName](0x00C0, 0x00D0)
+  let i64offseto = offset4o >>> 3
+  let i64leno = len4o >>> 3
+
+  assert_pointwise_eq(
+    fnName,
+    // Expected data must be supplied in little-endian form!
+    new BigUint64Array([0x6F6D6B6967656360n, 0x7F7D7B7977757370n]),
+    wasmMem64.slice(i64offseto, i64offseto + i64leno)
   )
 }
 

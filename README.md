@@ -15,6 +15,7 @@ This repo is a first step towards providing a set of worked examples of how each
 1. [Misbehaving `f32` Values](./docs/f32.md)
 1. [`splat`](./docs/splat.md)
 1. [`swizzle`](./docs/swizzle.md)
+2. [`add`](./docs/add.md)
 
 ## Usage
 
