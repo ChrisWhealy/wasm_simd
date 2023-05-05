@@ -2,6 +2,58 @@ import * as FMT from "./format.mjs"
 import * as CMP from "./compare.mjs"
 import * as MATH from "./math.mjs"
 
+export const float32TestValues = [Math.PI, Math.E, Math.SQRT2, Math.LOG10E]
+export const float64TestValues = new Float64Array([Math.PI, Math.E, Math.SQRT2, Math.LOG10E])
+export const simdDatatypes = (m => {
+  m.set('i8', 0xff)
+  m.set('i16', 0x0a0b)
+  m.set('i32', 0xdeadbeef)
+  m.set('i64', 0x0001020304050607n)
+  m.set('f32', float32TestValues[0])
+  m.set('f64', float64TestValues[1])
+
+  return m
+})(new Map())
+
+export const typedArrayForMemoryBuffer = wasmMemBuffer =>
+  dt => {
+    let wasmMem = null
+    let scaleFactor = 0
+
+    switch (dt) {
+      case 'i8':
+        wasmMem = new Uint8Array(wasmMemBuffer)
+        break
+
+      case 'i16':
+        wasmMem = new Uint16Array(wasmMemBuffer)
+        scaleFactor = 1
+        break
+
+      case 'i32':
+        wasmMem = new Uint32Array(wasmMemBuffer)
+        scaleFactor = 2
+        break
+
+      case 'i64':
+        wasmMem = new BigInt64Array(wasmMemBuffer)
+        scaleFactor = 3
+        break
+
+      case 'f32':
+        wasmMem = new Float32Array(wasmMemBuffer)
+        scaleFactor = 2
+        break
+
+      case 'f64':
+        wasmMem = new Float64Array(wasmMemBuffer)
+        scaleFactor = 3
+        break
+    }
+
+    return { wasmMem, scaleFactor }
+  }
+
 export const assert = (testGroup, testType) => {
   switch (testType) {
     case "ONE_TO_MANY_EQ": {
@@ -96,130 +148,3 @@ export const assert = (testGroup, testType) => {
     }
   }
 }
-
-export const float32TestValues = [Math.PI, Math.E, Math.SQRT2, Math.LOG10E]
-export const float64TestValues = new Float64Array([Math.PI, Math.E, Math.SQRT2, Math.LOG10E])
-export const simdDatatypes = (m => {
-  m.set('i8', 0xff)
-  m.set('i16', 0x0a0b)
-  m.set('i32', 0xdeadbeef)
-  m.set('i64', 0x0001020304050607n)
-  m.set('f32', float32TestValues[0])
-  m.set('f64', float64TestValues[1])
-
-  return m
-})(new Map())
-
-
-/***
- * The host environment and the WASM module must have shared knowledge of the memory map
- *
- * 0000-000F 16 x 8-bit unsigned integers
- * 0010-001F 16 x 8-bit signed integers
- * 0020-002F  8 x 16-bit unsigned integers
- * 0030-003F  8 x 16-bit signed integers
- * 0040-004F  4 x 32-bit signed integers
- * 0050-005F  4 x 32-bit floats
- * 0060-006F  2 x 64-bit signed integers
- * 0070-007F  2 x 64-bit floats
- * 0080-008F  16 x i8 swizzle indices
- * 0090-009F  Arbitrary v128 data
- * 00A0-00AF  1st Shuffle arg data
- * 00B0-00BF  2nd Shuffle arg data
- */
-export const initialiseSharedMemory = wasmMemoryBuffer => {
-  // 0000-000F   8-bit unsigned integers
-  // 0010-001F   8-bit signed integers
-  let wasmMem8u = new Uint8Array(wasmMemoryBuffer)
-
-  for (let i8 = 0; i8 < 16; i8++) {
-    wasmMem8u[i8] = i8
-    wasmMem8u[i8 + 16] = i8 | 0x80  // Flip sign bit
-  }
-
-  // 0020-002F  16-bit unsigned integers
-  // 0030-003F  16-bit signed integers
-  let wasmMem16 = new Uint16Array(wasmMemoryBuffer)
-
-  for (let i16 = 16; i16 < 24; i16++) {
-    wasmMem16[i16] = i16 - 16
-    wasmMem16[i16 + 8] = (i16 - 16) | 0x8000  // Flip sign bit
-  }
-
-  // * 0040-004F  32-bit signed integers
-  // * 0050-005F  32-bit floats
-  let wasmMem32i = new Uint32Array(wasmMemoryBuffer)
-  let wasmMem32f = new Float32Array(wasmMemoryBuffer)
-
-  for (let i32 = 16; i32 < 20; i32++) {
-    wasmMem32i[i32] = i32 - 16
-    wasmMem32f[i32 + 4] = float32TestValues[i32 - 16]
-  }
-
-  // * 0060-006F  32-bit signed integers
-  // * 0070-007F  32-bit floats
-  let wasmMem64i = new BigInt64Array(wasmMemoryBuffer)
-  let wasmMem64f = new Float64Array(wasmMemoryBuffer)
-
-  for (let i64 = 12; i64 < 14; i64++) {
-    wasmMem64i[i64] = BigInt(i64 - 12)
-    wasmMem64f[i64 + 2] = float64TestValues[i64 - 12]
-  }
-
-  // * 0080-008F  16, 8-bit swizzle indices [0x0F..0x00]
-  for (let i = 128; i < 144; i++) {
-    wasmMem8u[i] = 15 - (i - 128)
-  }
-
-  // * 0090-009F  Arbitrary v128 data
-  wasmMem32i[36] = 0xDEADBEEF  // Dead Beef
-  wasmMem32i[37] = 0xCAFED00D  // Cafe dood
-  wasmMem32i[38] = 0xBADDECAF  // Bad Decaf
-  wasmMem32i[39] = 0x0DDC15C0  // Odd Cisco
-
-  // * 00A0-00AF  1st Shuffle arg data
-  // * 00B0-00BF  2nd Shuffle arg data
-  for (let i = 160; i < 176; i++) {
-    wasmMem8u[i] = i - 160
-    wasmMem8u[i + 16] = i + 80  // Switch senior 4 bits on
-  }
-}
-
-export const typedArrayForMemoryBuffer = wasmMemBuffer =>
-  dt => {
-    let wasmMem = null
-    let scaleFactor = 0
-
-    switch (dt) {
-      case 'i8':
-        wasmMem = new Uint8Array(wasmMemBuffer)
-        break
-
-      case 'i16':
-        wasmMem = new Uint16Array(wasmMemBuffer)
-        scaleFactor = 1
-        break
-
-      case 'i32':
-        wasmMem = new Uint32Array(wasmMemBuffer)
-        scaleFactor = 2
-        break
-
-      case 'i64':
-        wasmMem = new BigInt64Array(wasmMemBuffer)
-        scaleFactor = 3
-        break
-
-      case 'f32':
-        wasmMem = new Float32Array(wasmMemBuffer)
-        scaleFactor = 2
-        break
-
-      case 'f64':
-        wasmMem = new Float64Array(wasmMemBuffer)
-        scaleFactor = 3
-        break
-    }
-
-    return { wasmMem, scaleFactor }
-  }

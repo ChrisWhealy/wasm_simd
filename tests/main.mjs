@@ -1,8 +1,5 @@
 import { startWasmModule } from "../utils/wasm.mjs"
-import {
-  initialiseSharedMemory,
-  simdDatatypes,
-} from '../utils/test.mjs'
+import { initialiseSharedMemory } from '../utils/memory.mjs'
 
 import testSplat from './splat.mjs'
 import testExtractLane from './extract_lane.mjs'
