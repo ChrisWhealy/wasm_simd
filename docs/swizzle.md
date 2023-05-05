@@ -5,7 +5,9 @@ So if you `swizzle` a 128-bit vector, you are rearranging the bytes of the first
 
 ## But Why Would I need This?
 
-There are lots of situations in which you might need to rearranging the byte order of some block of data, but a good example is where you need to reverse the [endianness](https://en.wikipedia.org/wiki/Endianness) of some data.
+There are lots of situations in which you might need to rearrange the byte order of some block of data, but a good example is swapping the [endianness](https://en.wikipedia.org/wiki/Endianness) of some data.
+
+## Swapping Endianness
 
 You may well encounter a situation in which the host environment has written some data to shared memory (E.G. the contents of a file), then the WebAssembly program needs to process that data.
 
