@@ -39,10 +39,11 @@ SNIP
 
 ## Transferring Vectors To/From the Host Environment
 
-At the moment, WASI inyterfaces such as `wasmtime` or `wasmer` can happily transport 128-bit values into or out of a WebAssembly module.
-However, the WebAssembly implementation in Node lacks this capability due to the fact that JavaScript has no datatype suitable for holding a value that large.
+At the moment, WASI interfaces such as `wasmtime` or `wasmer` can happily transport 128-bit values into or out of a WebAssembly module.
+However, the WebAssembly implementation in NodeJS lacks this capability due to the fact that JavaScript has no datatype suitable for holding a single value that wide.
 
-Before JavaScript supported the use of 64-bit values (`BigInt`) in the WebAssembly, there was a module transformation workaround that took a `.wasm` module, searched through the exported functions looking for 64-bit `param`s and `result`s, and transformed them into arrays of 8 `u8`s.
+That said, before JavaScript was able to transport 64-bit values across the Host/WebAssembly boundary, a workaround was available that took a `.wasm` module, searched through all the exported functions looking for 64-bit `param`s and `result`s, and transformed them into arrays of 8 `u8`s.
+This then allowed JavaScript `BigInt`s to be passed across the boundary.
 
 A similar transformation process is now needed in order to support 128-bit values (presumably transforming them into arrays of 16 `u8`s)
 
