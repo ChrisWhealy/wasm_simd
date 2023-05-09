@@ -38,7 +38,7 @@ SNIP
 ✅ splat: splat_f64 passed within acceptable floating point tolerance
 ```
 
-## Transferring Vectors To/From the Host Environment
+## Transferring Vectors (`v128`) To/From the Host Environment
 
 At the moment, WASI interfaces such as `wasmtime` or `wasmer` can happily transport 128-bit values into or out of a WebAssembly module.
 However, the WebAssembly implementation in NodeJS lacks this capability due to the fact that JavaScript has no datatype suitable for holding a single value that wide.
