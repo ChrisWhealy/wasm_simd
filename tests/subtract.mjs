@@ -21,7 +21,10 @@ const testSubtract = wasmExports => {
 
   assert_pointwise_eq(
     fnName,
-    new Uint8Array([0xFF, 0xFE, 0xFD, 0xFC, 0xFB, 0xFA, 0xF9, 0xF8, 0xF7, 0xF6, 0xF5, 0xF4, 0xF3, 0xF2, 0xF1, 0xF0]),
+    {
+      value: new Uint8Array([0xFF, 0xFE, 0xFD, 0xFC, 0xFB, 0xFA, 0xF9, 0xF8, 0xF7, 0xF6, 0xF5, 0xF4, 0xF3, 0xF2, 0xF1, 0xF0]),
+      type: 'i8'
+    },
     wasmMem8.slice(offset1, offset1 + len1)
   )
 
@@ -33,7 +36,10 @@ const testSubtract = wasmExports => {
   assert_pointwise_eq(
     fnName,
     // Expected data must be supplied in little-endian form!
-    new Uint16Array([0xFEFF, 0xFCFD, 0xFAFB, 0xF8F9, 0xF6F7, 0xF4F5, 0xF2F3, 0xF0F1]),
+    {
+      value: new Uint16Array([0xFEFF, 0xFCFD, 0xFAFB, 0xF8F9, 0xF6F7, 0xF4F5, 0xF2F3, 0xF0F1]),
+      type: 'i16'
+    },
     wasmMem16.slice(i16offset, i16offset + i16len)
   )
 
@@ -45,7 +51,10 @@ const testSubtract = wasmExports => {
   assert_pointwise_eq(
     fnName,
     // Expected data must be supplied in little-endian form!
-    new Uint32Array([0xFCFDFEFF, 0xF8F9FAFB, 0xF4F5F6F7, 0xF0F1F2F3]),
+    {
+      value: new Uint32Array([0xFCFDFEFF, 0xF8F9FAFB, 0xF4F5F6F7, 0xF0F1F2F3]),
+      type: 'i32'
+    },
     wasmMem32.slice(i32offset, i32offset + i32len)
   )
 
@@ -57,7 +66,10 @@ const testSubtract = wasmExports => {
   assert_pointwise_eq(
     fnName,
     // Expected data must be supplied in little-endian form!
-    new BigUint64Array([0xF8F9FAFBFCFDFEFFn, 0xF0F1F2F3F4F5F6F7n]),
+    {
+      value: new BigUint64Array([0xF8F9FAFBFCFDFEFFn, 0xF0F1F2F3F4F5F6F7n]),
+      type: 'i64'
+    },
     wasmMem64.slice(i64offset, i64offset + i64len)
   )
 }

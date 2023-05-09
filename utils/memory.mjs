@@ -105,3 +105,45 @@ export const initialiseSharedMemory = wasmMemoryBuffer => {
     wasmMem8u[i + 16] = 240 + (i - 192)  // Set senior bits to 1111
   }
 }
+
+/***
+ * Return a memory overlay appropriate to the required datatype
+ */
+export const typedArrayForMemoryBuffer = wasmMemBuffer =>
+  dt => {
+    let wasmMem = null
+    let scaleFactor = 0
+
+    switch (dt) {
+      case 'i8':
+        wasmMem = new Uint8Array(wasmMemBuffer)
+        break
+
+      case 'i16':
+        wasmMem = new Uint16Array(wasmMemBuffer)
+        scaleFactor = 1
+        break
+
+      case 'i32':
+        wasmMem = new Uint32Array(wasmMemBuffer)
+        scaleFactor = 2
+        break
+
+      case 'i64':
+        wasmMem = new BigInt64Array(wasmMemBuffer)
+        scaleFactor = 3
+        break
+
+      case 'f32':
+        wasmMem = new Float32Array(wasmMemBuffer)
+        scaleFactor = 2
+        break
+
+      case 'f64':
+        wasmMem = new Float64Array(wasmMemBuffer)
+        scaleFactor = 3
+        break
+    }
+
+    return { wasmMem, scaleFactor }
+  }

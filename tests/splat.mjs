@@ -1,7 +1,8 @@
+import { typedArrayForMemoryBuffer } from "../utils/memory.mjs"
+
 import {
   assert,
   simdDatatypes,
-  typedArrayForMemoryBuffer,
 } from "../utils/test.mjs"
 
 const testSplat = wasmExports => {

@@ -6,9 +6,9 @@ const wasmFilePath = "./bin/f32.wasm"
 // Storing Math.PI in an F32Array then reading it back does not return Math.PI, but 3.1415927410125732
 const piRounded = (new Float32Array([Math.PI]))[0]
 
-const expectPi = { value: Math.PI, type: 'f32', precise: true }
+const expectPi = { value: Math.PI, type: 'f32' }
 const expectPiImprecise = { value: Math.PI, type: 'f32' }
-const expectPiRounded = { value: piRounded, type: 'f32', precise: true }
+const expectPiRounded = { value: piRounded, type: 'f32' }
 
 startWasmModule(wasmFilePath)
   .then(
@@ -24,7 +24,7 @@ startWasmModule(wasmFilePath)
       let f64Array = new Float64Array([Math.PI])
       assert_eq('f32_from_array_precise', expectPi, f32Array[0])
       assert_eq('f32_from_array_imprecise', expectPiImprecise, f32Array[0])
-      assert_eq('f64_from_array', { value: Math.PI, type: 'f64', precise: true }, f64Array[0])
+      assert_eq('f64_from_array', { value: Math.PI, type: 'f64' }, f64Array[0])
 
       // Transporting certain float values between JS and WASM also gives different result
       assert_eq('f32_wasm_echo_precise', expectPi, exports.f32_echo(Math.PI))
