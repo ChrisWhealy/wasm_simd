@@ -1,19 +1,20 @@
 (module
   (memory
     (export "memory") 1
-    ;; 0000-000F   8-bit unsigned integers
-    ;; 0010-001F   8-bit signed integers
-    ;; 0020-002F  16-bit unsigned integers
-    ;; 0030-003F  16-bit signed integers
-    ;; 0040-004F  32-bit signed integers
-    ;; 0050-005F  32-bit floats
-    ;; 0060-006F  64-bit signed integers
-    ;; 0070-007F  64-bit floats
-    ;; 0080-008F  16, i8 swizzle indices
-    ;; 0090-009F  v128 data
-    ;; 00A0-00AF  1st Shuffle arg data
-    ;; 00B0-00BF  2nd Shuffle arg data
-    ;; 00C0-00CF  Values that will overflow when added/multiplied
+    ;; 0000-000F  8-bit unsigned integers
+    ;; 0010-001F  8-bit signed integers
+    ;; 0020-002F 16-bit unsigned integers
+    ;; 0030-003F 16-bit signed integers
+    ;; 0040-004F 32-bit signed integers
+    ;; 0050-005F 32-bit floats
+    ;; 0060-006F 64-bit signed integers
+    ;; 0070-007F 64-bit floats
+    ;; 0080-008F 16, i8 swizzle indices
+    ;; 0090-009F v128 data
+    ;; 00A0-00AF 1st Shuffle arg data
+    ;; 00B0-00BF 2nd Shuffle arg data
+    ;; 00C0-00CF Values that will overflow when added/multiplied
+    ;; 00D0-00DF Values that will overflow when added/multiplied etc
   )
 
   (global $I8_DATA_U       i32 (i32.const 0x0000))
@@ -646,6 +647,25 @@
   )
   (func (export "sub_i64") (param $arg1 i32) (param $arg2 i32) (result i32 i32)
     (v128.store (global.get $OUTPUT_PTR) (i64x2.sub (v128.load (local.get $arg1)) (v128.load (local.get $arg2))))
+    (global.get $OUTPUT_PTR)
+    (i32.const 16)
+  )
+
+  ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  ;; Integer Multiplication
+  ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  (func (export "mul_i16") (param $arg1 i32) (param $arg2 i32) (result i32 i32)
+    (v128.store (global.get $OUTPUT_PTR) (i16x8.mul (v128.load (local.get $arg1)) (v128.load (local.get $arg2))))
+    (global.get $OUTPUT_PTR)
+    (i32.const 16)
+  )
+  (func (export "mul_i32") (param $arg1 i32) (param $arg2 i32) (result i32 i32)
+    (v128.store (global.get $OUTPUT_PTR) (i32x4.mul (v128.load (local.get $arg1)) (v128.load (local.get $arg2))))
+    (global.get $OUTPUT_PTR)
+    (i32.const 16)
+  )
+  (func (export "mul_i64") (param $arg1 i32) (param $arg2 i32) (result i32 i32)
+    (v128.store (global.get $OUTPUT_PTR) (i64x2.mul (v128.load (local.get $arg1)) (v128.load (local.get $arg2))))
     (global.get $OUTPUT_PTR)
     (i32.const 16)
   )

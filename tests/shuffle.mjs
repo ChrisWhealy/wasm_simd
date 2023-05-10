@@ -1,4 +1,5 @@
 import { assert } from "../utils/test.mjs"
+import { u8ArrayShuffled } from "./data.mjs"
 
 const testShuffle = wasmExports => {
   let wasmMem8 = new Uint8Array(wasmExports.memory.buffer)
@@ -6,15 +7,7 @@ const testShuffle = wasmExports => {
 
   // Shuffle using hardcoded immediate mode indices
   let [offset, len] = wasmExports.shuffle()
-
-  assert_pointwise_eq(
-    'shuffle',
-    {
-      value: new Uint8Array([0x00, 0xF1, 0x02, 0xF3, 0x04, 0xF5, 0x06, 0xF7, 0x08, 0xF9, 0x0A, 0xFB, 0x0C, 0xFD, 0x0E, 0xFF]),
-      type: 'i8'
-    },
-    wasmMem8.slice(offset, offset + len)
-  )
+  assert_pointwise_eq('shuffle', { value: u8ArrayShuffled, type: 'i8' }, wasmMem8.slice(offset, offset + len))
 }
 
 export default testShuffle

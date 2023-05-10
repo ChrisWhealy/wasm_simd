@@ -2,24 +2,18 @@ const IDIOT = v => v
 const successIcon = '✅'
 const failureIcon = '❌'
 
-const bigIntAbs = n => n < 0 ? -n : n
-
 // Format a single byte as a binary string
 const formatAsBinaryStr = b => b.toString(2).padStart(8, '0')
 
 // Format `bitLen` bits as a hexadecimal string where bitLen is a multiple of 8
-const formatAsHexStr = bitLen => {
+const formatAsHexStr = (bitLen, isBigInt) => {
   let ceil = Math.pow(2, bitLen)
   let digits = bitLen >>> 2
 
   // Ensure that we always return the unsigned representation of v
-  return v => `0x${((v < 0) ? ceil + v : v).toString(16).padStart(digits, '0')}`
-}
-const formatAsBigHexStr = bitLen => {
-  let ceil = 2 << bitLen
-
-  // Ensure that we always return the unsigned representation of v
-  return v => `0x${((v < 0) ? BigInt(ceil) - v : v).toString(16).padStart(bitLen >>> 2, '0')}`
+  return !!isBigInt
+    ? v => `0x${((v < 0) ? BigInt(ceil) + v : v).toString(16).padStart(digits, '0')}`
+    : v => `0x${((v < 0) ? ceil + v : v).toString(16).padStart(digits, '0')}`
 }
 
 const u8AsChar = u8 => u8 < 32 ? '⚬' : String.fromCharCode(u8)
@@ -38,7 +32,7 @@ export const numFormatters = new Map()
 numFormatters.set('i8', formatAsHexStr(8))
 numFormatters.set('i16', formatAsHexStr(16))
 numFormatters.set('i32', formatAsHexStr(32))
-numFormatters.set('i64', formatAsBigHexStr(64))
+numFormatters.set('i64', formatAsHexStr(64, true))
 numFormatters.set('f32', n => n.toLocaleString("fullwide", formatOpts(16)))
 numFormatters.set('f64', n => n.toLocaleString("fullwide", formatOpts(21)))
 
@@ -66,11 +60,11 @@ export const testSuccess = testPrefix => ({
   msg: `${successIcon} ${testPrefix} passed`
 })
 
-export const errLengthMismatch = (testPrefix, expected, received) =>
+export const errLengthMismatch = (testPrefix, expectedLen, receivedLen) =>
   formatErrMsg(
     testPrefix,
-    'Expected array of length', expected.value, IDIOT,
-    'Received array of length', received, IDIOT
+    'Expected array of length ', expectedLen, IDIOT,
+    'Received array of length ', receivedLen, IDIOT
   )
 
 export const errSimpleEq = (testPrefix, expectedPrefix, expected, receivedPrefix, received) =>

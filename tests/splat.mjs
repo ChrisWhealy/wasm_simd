@@ -1,9 +1,6 @@
 import { typedArrayForMemoryBuffer } from "../utils/memory.mjs"
-
-import {
-  assert,
-  simdDatatypes,
-} from "../utils/test.mjs"
+import { assert } from "../utils/test.mjs"
+import { simdDatatypes } from "../tests/data.mjs"
 
 const testSplat = wasmExports => {
   let assert_one_to_many_eq = assert('splat', 'ONE_TO_MANY_EQ')

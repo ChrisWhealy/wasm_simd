@@ -1,23 +1,6 @@
 import * as FMT from "./format.mjs"
 import * as CMP from "./compare.mjs"
 
-// Warning: When retrieved from a Float32Array, the various Math constants will have been rounded
-// to a 23-bit mantissa and thus will no longer exactly equal the original value
-//
-// Beware!   (new Float32Array([Math.PI]))[0] === Math.PI   // false
-export const float32TestValues = new Float32Array([Math.PI, Math.E, Math.SQRT2, Math.LOG10E])
-export const float64TestValues = new Float64Array([Math.PI, Math.E, Math.SQRT2, Math.LOG10E])
-export const simdDatatypes = (m => {
-  m.set('i8', 0xff)
-  m.set('i16', 0x0a0b)
-  m.set('i32', 0xdeadbeef)
-  m.set('i64', 0x0001020304050607n)
-  m.set('f32', float32TestValues[0])
-  m.set('f64', float64TestValues[1])
-
-  return m
-})(new Map())
-
 export const assert = (testGroup, testType) => {
   switch (testType) {
     case "ONE_TO_MANY_EQ": {

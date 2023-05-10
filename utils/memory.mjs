@@ -1,7 +1,7 @@
 import {
   float32TestValues,
   float64TestValues
-} from "./test.mjs"
+} from "../tests/data.mjs"
 
 /***
  * The host environment and the WASM module must have shared knowledge of the memory map

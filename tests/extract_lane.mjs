@@ -1,9 +1,9 @@
 import { genFunctionNameForGroup } from '../utils/format.mjs'
+import { assert } from '../utils/test.mjs'
 import {
-  assert,
   float32TestValues,
   float64TestValues,
-} from '../utils/test.mjs'
+} from '../tests/data.mjs'
 
 const testExtractLane = wasmExports => {
   let wasmMem8u = new Uint8Array(wasmExports.memory.buffer)
