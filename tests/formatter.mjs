@@ -137,6 +137,6 @@ const testOneToManyEq = () => {
 }
 
 // testFormat()
-// testSimpleEq()
-// testPointwiseEq()
+testSimpleEq()
+testPointwiseEq()
 testOneToManyEq()
