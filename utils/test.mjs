@@ -2,7 +2,7 @@ import * as FMT from "./format.mjs"
 import * as CMP from "./compare.mjs"
 
 // Warning: When retrieved from a Float32Array, the various Math constants will have been rounded
-// to a 23-bit mantissa and thus will no longer be an exact representation of the original value
+// to a 23-bit mantissa and thus will no longer exactly equal the original value
 //
 // Beware!   (new Float32Array([Math.PI]))[0] === Math.PI   // false
 export const float32TestValues = new Float32Array([Math.PI, Math.E, Math.SQRT2, Math.LOG10E])

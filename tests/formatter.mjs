@@ -6,6 +6,7 @@ import {
   float64TestValues,
 } from "../utils/test.mjs"
 
+// Polyfill the TypedArray subclasses
 Uint8Array.prototype.toReversed = toReversed
 Uint16Array.prototype.toReversed = toReversed
 Uint32Array.prototype.toReversed = toReversed
@@ -18,10 +19,22 @@ BigInt64Array.prototype.toReversed = toReversed
 Float32Array.prototype.toReversed = toReversed
 Float64Array.prototype.toReversed = toReversed
 
-const u8Array = new Uint8Array([0xFF, 0xFE, 0xFD, 0xFC, 0xFB, 0xFA, 0xF9, 0xF8, 0xF7, 0xF6, 0xF5, 0xF4, 0xF3, 0xF2, 0xF1, 0xF0])
-const i16Array = new Int16Array([0xFFFE, 0xFDFC, 0xFBFA, 0xF9F8, 0xF7F6, 0xF5F4, 0xF3F2, 0xF1F0])
-const i32Array = new Int32Array([0xFFFEFDFC, 0xFBFAF9F8, 0xF7F6F5F4, 0xF3F2F1F0])
-const i64Array = new BigInt64Array([0xFFFEFDFCFBFAF9F8n, 0xF7F6F5F4F3F2F1F0n])
+const u8Data = [0xFF, 0xFE, 0xFD, 0xFC, 0xFB, 0xFA, 0xF9, 0xF8, 0xF7, 0xF6, 0xF5, 0xF4, 0xF3, 0xF2, 0xF1, 0xF0]
+const u8DataSplat = [0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
+const i16Data = [0xFFFE, 0xFDFC, 0xFBFA, 0xF9F8, 0xF7F6, 0xF5F4, 0xF3F2, 0xF1F0]
+const i16DataSplat = [0xFFFE, 0xFFFE, 0xFFFE, 0xFFFE, 0xFFFE, 0xFFFE, 0xFFFE, 0xFFFE]
+const i32Data = [0xFFFEFDFC, 0xFBFAF9F8, 0xF7F6F5F4, 0xF3F2F1F0]
+const i32DataSplat = [0xFFFEFDFC, 0xFFFEFDFC, 0xFFFEFDFC, 0xFFFEFDFC]
+const i64Data = [0xFFFEFDFCFBFAF9F8n, 0xF7F6F5F4F3F2F1F0n]
+const i64DataSplat = [0xFFFEFDFCFBFAF9F8n, 0xFFFEFDFCFBFAF9F8n]
+
+const f32DataSplat = [float32TestValues[0], float32TestValues[0], float32TestValues[0], float32TestValues[0]]
+const f64DataSplat = [float64TestValues[0], float64TestValues[0]]
+
+const u8Array = new Uint8Array(u8Data)
+const i16Array = new Int16Array(i16Data)
+const i32Array = new Int32Array(i32Data)
+const i64Array = new BigInt64Array(i64Data)
 
 // const testFormat = () => {
 //   let i8AsHexStr = FMT.numFormatters.get('i8')
@@ -94,6 +107,36 @@ const testPointwiseEq = () => {
   assert_pointwise_eq(genFnName(t, 'should_fail', null), { value: float64TestValues, type: 'f64' }, float64TestValues.toReversed())
 }
 
+const testOneToManyEq = () => {
+  let assert_one_to_many_eq = assert('formatter', 'ONE_TO_MANY_EQ')
+  let genFnName = FMT.genFunctionNameForGroup('one_to_many_eq')
+
+  let t = 'i8'
+  assert_one_to_many_eq(genFnName(t, 'should_pass', null), { value: 0xFF, type: 'i8' }, u8DataSplat)
+  assert_one_to_many_eq(genFnName(t, 'should_fail', null), { value: 0xFF, type: 'i8' }, u8Data)
+
+  t = 'i16'
+  assert_one_to_many_eq(genFnName(t, 'should_pass', null), { value: 0xFFFE, type: 'i16' }, i16DataSplat)
+  assert_one_to_many_eq(genFnName(t, 'should_fail', null), { value: 0xFFFE, type: 'i16' }, i16Data)
+
+  t = 'i32'
+  assert_one_to_many_eq(genFnName(t, 'should_pass', null), { value: 0xFFFEFDFC, type: 'i32' }, i32DataSplat)
+  assert_one_to_many_eq(genFnName(t, 'should_fail', null), { value: 0xFFFEFDFC, type: 'i32' }, i32Data)
+
+  t = 'i64'
+  assert_one_to_many_eq(genFnName(t, 'should_pass', null), { value: 0xFFFEFDFCFBFAF9F8n, type: 'i64' }, i64DataSplat)
+  assert_one_to_many_eq(genFnName(t, 'should_fail', null), { value: 0xFFFEFDFCFBFAF9F8n, type: 'i64' }, i64Data)
+
+  t = 'f32'
+  assert_one_to_many_eq(genFnName(t, 'should_pass', null), { value: float32TestValues[0], type: 'f32' }, f32DataSplat)
+  assert_one_to_many_eq(genFnName(t, 'should_fail', null), { value: float32TestValues[0], type: 'f32' }, float32TestValues)
+
+  t = 'f64'
+  assert_one_to_many_eq(genFnName(t, 'should_pass', null), { value: float64TestValues[0], type: 'f64' }, f64DataSplat)
+  assert_one_to_many_eq(genFnName(t, 'should_fail', null), { value: float64TestValues[0], type: 'f64' }, float64TestValues)
+}
+
 // testFormat()
-testSimpleEq()
-testPointwiseEq()
+// testSimpleEq()
+// testPointwiseEq()
+testOneToManyEq()
