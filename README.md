@@ -35,7 +35,7 @@ This will produce output something like the following:
 
 SNIP
 
-✅ splat: splat_f64 passed within acceptable floating point tolerance
+✅ splat: splat_f64 passed
 ```
 
 ## Transferring Vectors (`v128`) To/From the Host Environment
