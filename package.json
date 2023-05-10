@@ -9,7 +9,6 @@
   },
   "scripts": {
     "build": "wat2wasm ./src/simd.wat -o ./bin/simd.wasm",
-    "f32": "wat2wasm ./src/f32.wat -o ./bin/f32.wasm && node ./f32.mjs",
     "tests": "node ./tests/main.mjs",
     "formatterTests": "node ./tests/formatter.mjs",
     "buildAndTest": "wat2wasm ./src/simd.wat -o ./bin/simd.wasm && node ./tests/main.mjs"
