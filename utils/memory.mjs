@@ -14,12 +14,12 @@ import {
  * 0050-005F  4 x 32-bit floats
  * 0060-006F  2 x 64-bit signed integers
  * 0070-007F  2 x 64-bit floats
- * 0080-008F  16 x i8 swizzle indices
- * 0090-009F  Arbitrary v128 data
- * 00A0-00AF  1st Shuffle arg data
- * 00B0-00BF  2nd Shuffle arg data
- * 00C0-00CF  Values that will overflow when added/multiplied etc
- * 00D0-00DF  Values that will overflow when added/multiplied etc
+ * 0080-008F 16 x i8 swizzle indices
+ * 0090-009F Arbitrary v128 data
+ * 00A0-00AF 1st Shuffle arg data
+ * 00B0-00BF 2nd Shuffle arg data
+ * 00C0-00CF Values that will overflow when added/multiplied etc
+ * 00D0-00DF Values that will overflow when added/multiplied etc
  */
 export const initialiseSharedMemory = wasmMemoryBuffer => {
   // 0000-000F   8-bit unsigned integers

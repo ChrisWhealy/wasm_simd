@@ -2,8 +2,9 @@ import * as FMT from "./format.mjs"
 import * as CMP from "./compare.mjs"
 
 // Warning: When retrieved from a Float32Array, the various Math constants will have been rounded
-// Therefore
-//  (new Float32Array([Math.PI]))[0] === Math.PI   // false
+// to a 23-bit mantissa and thus will no longer be an exact representation of the original value
+//
+// Beware!   (new Float32Array([Math.PI]))[0] === Math.PI   // false
 export const float32TestValues = new Float32Array([Math.PI, Math.E, Math.SQRT2, Math.LOG10E])
 export const float64TestValues = new Float64Array([Math.PI, Math.E, Math.SQRT2, Math.LOG10E])
 export const simdDatatypes = (m => {
@@ -62,9 +63,9 @@ export const assert = (testGroup, testType) => {
       return (testName, expected, received) => {
         let testPrefix = (testName === testGroup) ? testGroup : `${testGroup}: ${testName}`
 
-        let { logFn, msg } = (!expected.value === received)
-          ? FMT.errSimpleEq(testPrefix, expectedPrefix, expected, receivedPrefix, received)
-          : FMT.testSuccess(testPrefix)
+        let { logFn, msg } = (expected.value === received)
+          ? FMT.testSuccess(testPrefix)
+          : FMT.errSimpleEq(testPrefix, expectedPrefix, expected, receivedPrefix, received)
 
         console[logFn](msg)
       }
