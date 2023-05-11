@@ -1,17 +1,6 @@
-import {
-  u8ArrayEvens,
-  u8ArrayEvensfrom0x60,
-  u16ArrayEvenPairs,
-  u16ArrayFrom0x60,
-  u32ArrayEvens,
-  u32ArrayOdds,
-  u64ArrayEvens,
-  u64ArrayOddsFrom0x60,
-} from "./data.mjs"
+import { u32ArrayDotResult } from "./data.mjs"
 import { genFunctionNameForGroup } from "../utils/format.mjs"
 import { assert } from "../utils/test.mjs"
-
-const u32ArrayDotResult = new Int32Array([1, 13, 41, 85])
 
 const testDot = wasmExports => {
   let wasmMem16 = new Uint16Array(wasmExports.memory.buffer)

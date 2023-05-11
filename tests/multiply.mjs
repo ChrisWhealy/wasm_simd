@@ -1,5 +1,5 @@
 import {
-  u16ArrayEvens,
+  u16ArrayLowEvens,
   u16ArrayFrom0xe0,
 } from "./data.mjs"
 import { genFunctionNameForGroup } from "../utils/format.mjs"
@@ -23,7 +23,7 @@ const testMultiply = wasmExports => {
   let [offset1, len1] = wasmExports[fnName](0x0200, 0x0210)
   let i16offset = offset1 >>> 1
   let i16len = len1 >>> 1
-  assert_pointwise_eq(fnName, { value: u16ArrayEvens, type: 'i16' }, wasmMem16.slice(i16offset, i16offset + i16len))
+  assert_pointwise_eq(fnName, { value: u16ArrayLowEvens, type: 'i16' }, wasmMem16.slice(i16offset, i16offset + i16len))
 
   // Multiplication with ignored overflow
   for (let i = 0x0100; i < 0x0108; i++) {

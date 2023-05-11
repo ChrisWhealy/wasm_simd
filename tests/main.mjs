@@ -11,6 +11,7 @@ import testAdd from './add.mjs'
 import testSubtract from './subtract.mjs'
 import testMultiply from './multiply.mjs'
 import testDot from './dot.mjs'
+import testExtMultiply from './ext_multiply.mjs'
 
 
 // Polyfill the TypedArray subclasses to provide toReversed()
@@ -53,5 +54,8 @@ startWasmModule(wasmFilePath)
       testSubtract(exports)
       testMultiply(exports)
       testDot(exports)
+
+      console.log(centredHeader('Extended Integer Arithmetic'))
+      testExtMultiply(exports)
     }
   )
