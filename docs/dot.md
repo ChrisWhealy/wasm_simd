@@ -2,7 +2,9 @@
 
 The dot product of two vectors is the sum of the products of the vector components:
 
-$\begin{bmatrix}1\\2\end{bmatrix}\dot{}\begin{bmatrix}3\\4\end{bmatrix}$ => `(1 * 3) + (2 * 4) = 14`
+$$
+\begin{bmatrix}1 \\\2 \end{bmatrix}\dot{}\begin{bmatrix}3 \\\4 \end{bmatrix} \equiv (1 * 3) + (2 * 4) = 14
+$$
 
 ![Dot Product](../img/dot.png)
 
