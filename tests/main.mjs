@@ -10,9 +10,10 @@ import testShuffle from './shuffle.mjs'
 import testAdd from './add.mjs'
 import testSubtract from './subtract.mjs'
 import testMultiply from './multiply.mjs'
+import testDot from './dot.mjs'
 
 
-// Polyfill the TypedArray subclasses
+// Polyfill the TypedArray subclasses to provide toReversed()
 Uint8Array.prototype.toReversed = toReversed
 Uint16Array.prototype.toReversed = toReversed
 Uint32Array.prototype.toReversed = toReversed
@@ -28,7 +29,7 @@ Float64Array.prototype.toReversed = toReversed
 const wasmFilePath = "./bin/simd.wasm"
 
 const SEPARATOR = "* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
-const genHeader = msg => {
+const centredHeader = msg => {
   let padWidth = msg.length + Math.ceil(SEPARATOR.length / 2 - msg.length / 2)
   return `${SEPARATOR}\n${msg.padStart(padWidth, ' ')}\n${SEPARATOR}`
 }
@@ -38,18 +39,19 @@ startWasmModule(wasmFilePath)
     ({ exports }) => {
       initialiseSharedMemory(exports.memory.buffer)
 
-      console.log(genHeader('Construct SIMD Values'))
+      console.log(centredHeader('Construct SIMD Values'))
       testSplat(exports)
       testSwizzle(exports)
       testShuffle(exports)
 
-      console.log(genHeader('Access Vector Lanes'))
+      console.log(centredHeader('Access Vector Lanes'))
       testExtractLane(exports)
       testReplaceLane(exports)
 
-      console.log(genHeader('Integer Arithmetic'))
+      console.log(centredHeader('Integer Arithmetic'))
       testAdd(exports)
       testSubtract(exports)
       testMultiply(exports)
+      testDot(exports)
     }
   )

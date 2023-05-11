@@ -16,6 +16,7 @@ import {
   float32TestValues,
   float64TestValues,
 } from "../utils/test.mjs"
+
 const testFormat = () => {
   let i8AsHexStr = FMT.numFormatters.get('i8')
   let i16AsHexStr = FMT.numFormatters.get('i16')
@@ -27,7 +28,6 @@ const testFormat = () => {
     console.log(`${i << 8} = ${i16AsHexStr(i << 8)}`)
     console.log(`${i << 24} = ${i32AsHexStr(i << 24)}`)
   }
-
 }
 
 const testSimpleEq = () => {

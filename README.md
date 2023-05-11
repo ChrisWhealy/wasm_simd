@@ -9,13 +9,14 @@ This repo is a first step towards providing a set of worked examples of how each
 
 ***THIS IS A WORK IN PRGRESS***
 
+Some of the less intuitive SIMD instructions are documented below
 ## Table of Contents
 
 1. [The SIMD Concept](./docs/simd_concept.md)
 1. [Misbehaving `f32` Values](./docs/f32.md)
 1. [`splat`](./docs/splat.md)
 1. [`swizzle`](./docs/swizzle.md)
-2. [`add`](./docs/add.md)
+1. [`dot`](./docs/dot.md)
 
 ## Usage
 
@@ -25,17 +26,31 @@ At the moment, only the unit tests can be run:
 npm run buildAndTest
 ```
 
-This will produce output something like the following:
+Or, if the WebAssembly module has already been compiled:
+```bash
+npm run tests
+```
+
+This will produce output starting like this:
 
 ```bash
 > understanding-wasm-simd-instructions@1.1.0 buildAndTest
 > wat2wasm ./src/simd.wat -o ./bin/simd.wasm && node ./tests/main.mjs
 
-✅ extract_lane: extract_lane_0_i8_u passed
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                             Construct SIMD Values
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+✅ splat: splat_i8 passed
+✅ splat: splat_i16 passed
+✅ splat: splat_i32 passed
+✅ splat: splat_i64 passed
+✅ splat: splat_f32 passed
+✅ splat: splat_f64 passed
+✅ swizzle: swizzle_im passed
+✅ swizzle: swizzle_var passed
+✅ shuffle passed
 
 SNIP
-
-✅ splat: splat_f64 passed
 ```
 
 ## Transferring Vectors (`v128`) To/From the Host Environment

@@ -669,4 +669,13 @@
     (global.get $OUTPUT_PTR)
     (i32.const 16)
   )
+
+  ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  ;; Integer dot product
+  ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  (func (export "dot_i16") (param $arg1 i32) (param $arg2 i32) (result i32 i32)
+    (v128.store (global.get $OUTPUT_PTR) (i32x4.dot_i16x8_s (v128.load (local.get $arg1)) (v128.load (local.get $arg2))))
+    (global.get $OUTPUT_PTR)
+    (i32.const 16)
+  )
 )
