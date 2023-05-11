@@ -20,7 +20,7 @@ There are 6 versions of `splat`; one for each vector shape:
 (i32x4.splat (f32.const 3.141592654))
 
 ;; Create a vector with 2 64-bit lanes each containing PI as 3.141592653589793
-(i62x2.splat (f64.const 3.141592653589793))
+(i64x2.splat (f64.const 3.141592653589793))
 ```
 
 Given that WebAssembly does not have explicit datatypes for 8- or 16-bit integers, if you wish to use an 8- or 16-bit initial value, that must be supplied in an `i32`.
